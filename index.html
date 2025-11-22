@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ChexoraHub</title>
+
+<style>
+body { margin:0; background:#0b1220; color:#eee; font-family:Arial; }
+header { background:#111a2a; padding:18px; text-align:center; font-size:22px; }
+.container { max-width:900px; margin:0 auto; padding:15px; }
+.search-box { display:flex; gap:8px; margin-bottom:12px; }
+.search-box input {
+  flex:1; padding:10px; border-radius:8px; border:0; background:#0f1a30; color:#fff;
+}
+.search-box button {
+  padding:10px 15px; background:#ff3366; border:0; border-radius:8px; color:white;
+  cursor:pointer;
+}
+.categories { display:flex; gap:8px; overflow-x:auto; margin-bottom:12px; }
+.cat {
+  padding:8px 14px; background:#132035; border-radius:20px; cursor:pointer; white-space:nowrap;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:16px;
+}
+
+.card {
+  background:#111c2e; padding:10px; border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.4);
+}
+.card img {
+  width:100%; height:150px; object-fit:cover; border-radius:8px; background:#000;
+}
+.card-title { margin-top:8px; font-size:16px; font-weight:600; }
+.card-desc { color:#9aa4b8; font-size:14px; margin-top:5px; }
+.card a {
+  display:inline-block; padding:8px 12px; background:#ff3366;
+  border-radius:8px; color:white; margin-top:10px; text-decoration:none;
+}
+
+.ad-box { text-align:center; margin:15px 0; }
+.footer { text-align:center; padding:15px; color:#99aabb; margin-top:25px; }
+</style>
+</head>
+
+<body>
+
+<header>ChexoraHub</header>
+
+<div class="container">
+
+  <!-- Search -->
+  <div class="search-box">
+    <input id="search" placeholder="Search by category..." />
+    <button id="showCats">Categories</button>
+  </div>
+
+  <!-- Category Buttons -->
+  <div id="catBar" class="categories" style="display:none;">
+    <div class="cat" data-cat="Bangladeshi">Bangladeshi</div>
+    <div class="cat" data-cat="Indian">Indian</div>
+    <div class="cat" data-cat="Foreign">Foreign</div>
+    <div class="cat" data-cat="Hardscore">Hardscore</div>
+    <div class="cat" data-cat="Movie">Movie</div>
+  </div>
+
+  <!-- TOP Ad -->
+  <div class="ad-box">
+<script type="text/javascript">
+ atOptions = {
+  'key' : '1535101a42bd09dee1fb390e6f781fe3',
+  'format' : 'iframe',
+  'height' : 250,
+  'width' : 300,
+  'params' : {}
+ };
+</script>
+<script src="//www.highperformanceformat.com/1535101a42bd09dee1fb390e6f781fe3/invoke.js"></script>
+  </div>
+
+  <!-- Video Grid -->
+  <div id="grid" class="grid"></div>
+
+  <!-- Bottom Ad -->
+  <div class="ad-box">
+<script async src="//pl27967475.effectivegatecpm.com/e1682f5b5155c961011e82faea551290/invoke.js"></script>
+<div id="container-e1682f5b5155c961011e82faea551290"></div>
+  </div>
+
+</div>
+
+<div class="footer">© ChexoraHub 2025</div>
+
+<script>
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const catBar = document.getElementById("catBar");
+
+document.getElementById("showCats").onclick = function() {
+  catBar.style.display = (catBar.style.display === "none") ? "flex" : "none";
+};
+
+async function loadVideos() {
+  try {
+    const res = await fetch("videos.json");
+    const list = await res.json();
+    render(list);
+  } catch {
+    grid.innerHTML = "<p style='color:#f88'>videos.json missing</p>";
+  }
+}
+
+function render(list) {
+  grid.innerHTML = "";
+  for (let i = 0; i < list.length; i++) {
+    let v = list[i];
+
+    if (i % 5 === 0 && i !== 0) {
+      const ad = document.createElement("div");
+      ad.className = "ad-box";
+      ad.innerHTML =
+        "<script type='text/javascript'>atOptions={key:'30921df49dc35be6701cc3d7f8ca8108',format:'iframe',height:50,width:320,params:{}};<\/script>" +
+        "<script src='//www.highperformanceformat.com/30921df49dc35be6701cc3d7f8ca8108/invoke.js'><\/script>";
+      grid.appendChild(ad);
+    }
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML =
+      "<img src='" + v.thumb + "'>" +
+      "<div class='card-title'>" + v.title + "</div>" +
+      "<div class='card-desc'>" + v.desc + "</div>" +
+      "<a href='" + v.url + "' target='_blank'>Watch</a>";
+
+    grid.appendChild(card);
+  }
+}
+
+catBar.onclick = function(e) {
+  if (!e.target.dataset.cat) return;
+  filter(e.target.dataset.cat);
+};
+
+function filter(cat) {
+  fetch("videos.json")
+    .then(r => r.json())
+    .then(data => render(data.filter(v => v.cat === cat)));
+}
+
+search.oninput = function() {
+  const q = search.value.toLowerCase();
+  if (q === "") {
+    loadVideos();
+    return;
+  }
+  const match = ["bangladeshi","indian","foreign","hardscore","movie"].filter(c => c.includes(q));
+  if (!match.length) {
+    grid.innerHTML = "<p>No match</p>";
+    return;
+  }
+  filter(match[0][0].toUpperCase() + match[0].slice(1));
+};
+
+loadVideos();
+</script>
+
+</body>
+</html>
