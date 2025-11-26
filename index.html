@@ -1,37 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChexoraHub</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChexoraHub</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0d0d0d;
+      margin: 0;
+      padding: 0;
+      color: white;
+    }
+
+    /* CATEGORY BUTTONS */
+    .categories {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 15px;
+      justify-content: center;
+    }
+
+    .cat-btn {
+      padding: 10px 16px;
+      background: #1f1f1f;
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      border: 1px solid #444;
+      cursor: pointer;
+    }
+
+    /* VIDEO GRID */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 15px;
+      padding: 15px;
+    }
+
+    .video-card {
+      background: #111;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    /* SQUARE THUMBNAIL */
+    .thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    /* WATCH BUTTON */
+    .btn-watch {
+      margin-top: 10px;
+      padding: 8px 18px;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      text-align: center;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    /* ADS CONTAINER */
+    .ads-box {
+      margin: 20px auto;
+      width: 320px;
+      max-width: 90%;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>ChexoraHub</header>
-
-<div class="container">
-
-  <div class="search-box">
-    <input id="search" placeholder="Search by category...">
-    <button id="showCats">Categories</button>
+  <!-- TOP BANNER AD -->
+  <div class="ads-box">
+    <script type="text/javascript">
+      atOptions = { 'key':'1535101a42bd09dee1fb390e6f781fe3','format':'iframe','height':250,'width':300,'params':{} };
+    </script>
+    <script src="//www.highperformanceformat.com/1535101a42bd09dee1fb390e6f781fe3/invoke.js"></script>
   </div>
 
-  <div class="categories" id="catBar" style="display:none;">
-      <div class="cat" data-cat="Bangladeshi">Bangladeshi</div>
-      <div class="cat" data-cat="Indian">Indian</div>
-      <div class="cat" data-cat="Foreign">Foreign</div>
-      <div class="cat" data-cat="Hardscore">Hardscore</div>
-      <div class="cat" data-cat="Movie">Movie</div>
+  <h2 style="text-align:center; margin-top:5px;">ChexoraHub</h2>
+
+  <!-- CATEGORY BUTTONS -->
+  <div class="categories">
+    <button class="cat-btn" onclick="filterCategory('Bangladeshi')">Bangladeshi</button>
+    <button class="cat-btn" onclick="filterCategory('Indian')">Indian</button>
+    <button class="cat-btn" onclick="filterCategory('Foreign')">Foreign</button>
+    <button class="cat-btn" onclick="filterCategory('Hardscore')">Hardscore</button>
+    <button class="cat-btn" onclick="filterCategory('Movie')">Movie</button>
   </div>
 
-  <div id="grid" class="grid"></div>
+  <!-- NATIVE AD -->
+  <div class="ads-box">
+    <script async src="//pl27967475.effectivegatecpm.com/e1682f5b5155c961011e82faea551290/invoke.js"></script>
+    <div id="container-e1682f5b5155c961011e82faea551290"></div>
+  </div>
 
-  <div class="footer">© ChexoraHub 2025</div>
+  <!-- VIDEO SECTION -->
+  <div id="videos" class="video-grid"></div>
 
-</div>
+  <!-- SOCIAL BAR -->
+  <div class="ads-box">
+    <script src="//pl27896379.effectivegatecpm.com/a0/33/d0/a033d08e95956fd914684b1fff0b8680.js"></script>
+  </div>
 
-<script src="app.js"></script>
+<script>
+  let allVideos = [];
+
+  async function loadVideos() {
+    let data = await fetch("videos.json");
+    allVideos = await data.json();
+    showVideos(allVideos);
+  }
+
+  function showVideos(list) {
+    let container = document.getElementById("videos");
+    container.innerHTML = "";
+
+    list.forEach(v => {
+      container.innerHTML += `
+        <div class="video-card">
+          <img src="${v.thumb}" class="thumb">
+          <p>${v.title}</p>
+          <a href="${v.url}" target="_blank" class="btn-watch">Watch Video</a>
+        </div>
+      `;
+    });
+  }
+
+  function filterCategory(cat) {
+    showVideos(allVideos.filter(v => v.cat === cat));
+  }
+
+  loadVideos();
+</script>
+
 </body>
 </html>
