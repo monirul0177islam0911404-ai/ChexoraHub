@@ -1,301 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChexoraHub - Video Collection</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Additional inline styles for better appearance */
-        .header {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #007bff, #6610f2);
-            margin-bottom: 0;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .header p {
-            margin: 5px 0 0 0;
-            color: #e0e0e0;
-            font-size: 1.1rem;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-        }
-        
-        .error-message {
-            background: #dc3545;
-            color: white;
-            padding: 15px;
-            margin: 15px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .no-videos {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-            grid-column: 1 / -1;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChexoraHub</title>
+
+<style>
+body{
+    font-family:Arial;background:#0d0d0d;margin:0;padding:0;color:white;
+}
+.categories{
+    display:flex;gap:10px;flex-wrap:wrap;padding:15px;justify-content:center;
+}
+.cat-btn{
+    padding:10px 16px;background:#1f1f1f;color:white;border-radius:6px;font-weight:bold;
+    border:1px solid #444;cursor:pointer;
+}
+
+/* 🔥 2 Column Grid */
+.video-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    padding:15px;
+}
+
+.video-card{
+    background:#111;padding:10px;border-radius:10px;text-align:center;
+}
+
+.thumb{
+    width:100%;aspect-ratio:1/1;border-radius:10px;object-fit:cover;
+}
+
+.btn-watch{
+    margin-top:10px;padding:8px 18px;background:#007bff;color:white;border-radius:6px;
+    text-align:center;display:inline-block;font-weight:bold;
+}
+
+.ads-box{
+    margin:20px auto;width:320px;max-width:90%;text-align:center;
+}
+</style>
 </head>
 <body>
-    <!-- Header Section -->
-    <div class="header">
-        <h1>🎬 ChexoraHub</h1>
-        <p>Your Ultimate Video Collection</p>
-    </div>
 
-    <!-- Top Ad -->
-    <div class="ads-box">
-        <script type="text/javascript">
-            atOptions = {
-                'key': '30921df49dc35be6701cc3d7f8ca8108',
-                'format': 'iframe',
-                'height': 50,
-                'width': 320,
-                'params': {}
-            };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/30921df49dc35be6701cc3d7f8ca8108/invoke.js"></script>
-    </div>
+<!-- TOP AD -->
+<div class="ads-box">
+<script type="text/javascript">
+	atOptions = {
+		'key' : '30921df49dc35be6701cc3d7f8ca8108',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/30921df49dc35be6701cc3d7f8ca8108/invoke.js"></script>
+</div>
 
-    <!-- Category Buttons -->
-    <div class="categories">
-        <button class="cat-btn active" onclick="filterCategory('all')">All Videos</button>
-        <button class="cat-btn" onclick="filterCategory('Bangladeshi')">Bangladeshi</button>
-        <button class="cat-btn" onclick="filterCategory('Indian')">Indian</button>
-        <button class="cat-btn" onclick="filterCategory('Foreign')">Foreign</button>
-        <button class="cat-btn" onclick="filterCategory('Hardscore')">Hardscore</button>
-        <button class="cat-btn" onclick="filterCategory('Movie')">Movie</button>
-    </div>
+<h2 style="text-align:center;margin-top:5px;">ChexoraHub</h2>
 
-    <!-- Loading State -->
-    <div id="loading" class="loading">
-        <p>Loading videos... 🔄</p>
-    </div>
+<!-- CATEGORY BUTTONS -->
+<div class="categories">
+<button class="cat-btn" onclick="filterCategory('Bangladeshi')">Bangladeshi</button>
+<button class="cat-btn" onclick="filterCategory('Indian')">Indian</button>
+<button class="cat-btn" onclick="filterCategory('Foreign')">Foreign</button>
+<button class="cat-btn" onclick="filterCategory('Hardscore')">Hardscore</button>
+<button class="cat-btn" onclick="filterCategory('Movie')">Movie</button>
+</div>
 
-    <!-- Error Message -->
-    <div id="error" class="error-message" style="display: none;">
-        Error loading videos. Please check your internet connection.
-    </div>
+<!-- VIDEO SECTION -->
+<div id="videos" class="video-grid"></div>
 
-    <!-- Video Grid -->
-    <div id="videos" class="video-grid" style="display: none;"></div>
+<!-- NATIVE AD -->
+<div class="ads-box">
+<script async src="//pl27967475.effectivegatecpm.com/e1682f5b5155c961011e82faea551290/invoke.js"></script>
+<div id="container-e1682f5b5155c961011e82faea551290"></div>
+</div>
 
-    <!-- No Videos Message -->
-    <div id="noVideos" class="no-videos" style="display: none;">
-        <p>No videos found in this category. 😞</p>
-    </div>
+<!-- SOCIAL BAR -->
+<div class="ads-box">
+<script src="//pl27896379.effectivegatecpm.com/a0/33/d0/a033d08e95956fd914684b1fff0b8680.js"></script>
+</div>
 
-    <!-- Native Ad -->
-    <div class="ads-box">
-        <script async src="//pl27967475.effectivegatecpm.com/e1682f5b5155c961011e82faea551290/invoke.js"></script>
-        <div id="container-e1682f5b5155c961011e82faea551290"></div>
-    </div>
+<script>
+let allVideos=[];
 
-    <!-- Social Bar -->
-    <div class="ads-box">
-        <script src="//pl27896379.effectivegatecpm.com/a0/33/d0/a033d08e95956fd914684b1fff0b8680.js"></script>
-    </div>
+async function loadVideos(){
+    let d=await fetch("videos.json");
+    allVideos=await d.json();
+    showVideos(allVideos);
+}
 
-    <!-- Footer -->
-    <div style="text-align: center; padding: 20px; color: #666; margin-top: 30px;">
-        <p>&copy; 2024 ChexoraHub. All rights reserved.</p>
-    </div>
+function showVideos(list){
+    let c=document.getElementById("videos");
+    c.innerHTML="";
+    list.forEach(v=>{
+        c.innerHTML+=`
+        <div class="video-card">
+            <img src="${v.thumb}" class="thumb">
+            <p>${v.title}</p>
+            <a href="${v.url}" target="_blank" class="btn-watch">Watch Video</a>
+        </div>`;
+    });
+}
 
-    <script>
-        // Global variables
-        let allVideos = [];
-        let currentCategory = 'all';
+function filterCategory(cat){
+    showVideos(allVideos.filter(v=>v.cat===cat));
+}
 
-        // DOM elements
-        const videosContainer = document.getElementById('videos');
-        const loadingElement = document.getElementById('loading');
-        const errorElement = document.getElementById('error');
-        const noVideosElement = document.getElementById('noVideos');
+loadVideos();
+</script>
 
-        // Load videos from JSON file
-        async function loadVideos() {
-            try {
-                showLoading();
-                
-                const response = await fetch('./videos.json');
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                allVideos = await response.json();
-                
-                if (allVideos.length === 0) {
-                    throw new Error('No videos found in JSON file');
-                }
-                
-                hideLoading();
-                showVideos(allVideos);
-                
-            } catch (error) {
-                console.error('Error loading videos:', error);
-                hideLoading();
-                showError();
-                
-                // Fallback to demo data
-                loadDemoVideos();
-            }
-        }
-
-        // Demo data fallback
-        function loadDemoVideos() {
-            allVideos = [
-                {
-                    title: "Bangladeshi Drama Scene",
-                    thumb: "https://via.placeholder.com/300x169/ff0000/fff?text=Bangladeshi+Drama",
-                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cat: "Bangladeshi"
-                },
-                {
-                    title: "Indian Movie Trailer", 
-                    thumb: "https://via.placeholder.com/300x169/00ff00/fff?text=Indian+Movie",
-                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cat: "Indian"
-                },
-                {
-                    title: "Hollywood Action Scene",
-                    thumb: "https://via.placeholder.com/300x169/0000ff/fff?text=Hollywood+Action",
-                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cat: "Foreign"
-                },
-                {
-                    title: "Intense Gaming Moments",
-                    thumb: "https://via.placeholder.com/300x169/ff00ff/fff?text=Gaming+Highlights",
-                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cat: "Hardscore"
-                },
-                {
-                    title: "Blockbuster Movie 2024",
-                    thumb: "https://via.placeholder.com/300x169/ffff00/000?text=Blockbuster+2024",
-                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cat: "Movie"
-                },
-                {
-                    title: "Bangladeshi Music Video",
-                    thumb: "https://via.placeholder.com/300x169/ff6600/fff?text=Music+Video",
-                    url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                    cat: "Bangladeshi"
-                }
-            ];
-            
-            showVideos(allVideos);
-            hideError();
-        }
-
-        // Display videos in grid
-        function showVideos(videoList) {
-            if (!videoList || videoList.length === 0) {
-                showNoVideos();
-                return;
-            }
-            
-            hideNoVideos();
-            videosContainer.style.display = 'grid';
-            
-            videosContainer.innerHTML = '';
-            
-            videoList.forEach(video => {
-                const videoCard = document.createElement('div');
-                videoCard.className = 'video-card';
-                videoCard.innerHTML = `
-                    <img src="${video.thumb}" class="thumb" alt="${video.title}" loading="lazy">
-                    <p class="video-title">${video.title}</p>
-                    <div class="video-category">${video.cat}</div>
-                    <a href="${video.url}" target="_blank" class="btn-watch">▶ Watch Video</a>
-                `;
-                videosContainer.appendChild(videoCard);
-            });
-        }
-
-        // Filter videos by category
-        function filterCategory(category) {
-            currentCategory = category;
-            
-            // Update active button
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            if (category === 'all') {
-                showVideos(allVideos);
-            } else {
-                const filteredVideos = allVideos.filter(video => video.cat === category);
-                showVideos(filteredVideos);
-            }
-        }
-
-        // Utility functions
-        function showLoading() {
-            loadingElement.style.display = 'block';
-            videosContainer.style.display = 'none';
-            errorElement.style.display = 'none';
-            noVideosElement.style.display = 'none';
-        }
-
-        function hideLoading() {
-            loadingElement.style.display = 'none';
-        }
-
-        function showError() {
-            errorElement.style.display = 'block';
-            videosContainer.style.display = 'none';
-            noVideosElement.style.display = 'none';
-        }
-
-        function hideError() {
-            errorElement.style.display = 'none';
-        }
-
-        function showNoVideos() {
-            noVideosElement.style.display = 'block';
-            videosContainer.style.display = 'none';
-        }
-
-        function hideNoVideos() {
-            noVideosElement.style.display = 'none';
-        }
-
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadVideos();
-            
-            // Add click handlers for category buttons
-            document.querySelectorAll('.cat-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    document.querySelectorAll('.cat-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                });
-            });
-        });
-
-        // Handle window resize for better responsiveness
-        window.addEventListener('resize', function() {
-            // You can add responsive behavior here if needed
-        });
-    </script>
 </body>
 </html>
